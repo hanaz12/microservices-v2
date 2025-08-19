@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  # ---------------- Students Postgres ----------------
+  postgres-students:
+    container_name: my_postgres_container_for_students
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: studentsDB
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-students-data:/var/lib/postgresql/data
+    networks:
+      - microservices-net
+
+  # ---------------- Schools Postgres ----------------
+  postgres-schools:
+    container_name: my_postgres_container_for_schools
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: schoolsDB
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres-schools-data:/var/lib/postgresql/data
+    networks:
+      - microservices-net
+
+  # ---------------- pgAdmin ----------------
+  pgadmin:
+    container_name: my_pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres-students
+      - postgres-schools
+    networks:
+      - microservices-net
+
+  # ---------------- Zipkin ----------------
+  zipkin:
+    container_name: my_zipkin
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - microservices-net
+
+# ---------------- Volumes ----------------
+volumes:
+  postgres-students-data:
+  postgres-schools-data:
+
+# ---------------- Network ----------------
+networks:
+  microservices-net:
+    driver: bridge
