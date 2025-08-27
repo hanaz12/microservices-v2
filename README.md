@@ -62,8 +62,5 @@ The project showcases the use of Zipkin for distributed tracing, enhancing appli
 
 
 
-## Contact
-
-[Habiba Rajab] - [habibaragab324@gmail.com]
 
 
